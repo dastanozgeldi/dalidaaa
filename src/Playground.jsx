@@ -5,6 +5,11 @@ function Playground() {
     const [bpm, setBpm] = useState(0);
     const [userPosition, setUserPosition] = useState(1);
     const [isRecording, setIsRecording] = useState(false);
+    const [offsetRight, setOffsetRight] = useState(0);
+    const [offsetLeft, setOffsetLeft] = useState(0);
+    const [results, setResults] = useState('');
+    const [timer, setTimer] = useState(0);
+    const [aaas, setAaas] = useState("")
 
     let audioContext = null;
     let scriptNode = null;
@@ -30,6 +35,7 @@ function Playground() {
     const startListening = async () => {
         try {
             setIsRecording(true);
+            setResults("")
             // Access the user's microphone
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
@@ -49,96 +55,151 @@ function Playground() {
         }
     };
 
-    const stopListening = () => {
-        if (audioContext) {
-            // Disconnect the microphone and script node
-            scriptNode.removeEventListener('audioprocess', handleAudioProcess);
-            scriptNode.disconnect();
-            audioContext.close();
+    const stopRecording = () => {
+        setIsRecording(false);
+        resetGame()
+        scriptNode.removeEventListener('audioprocess', handleAudioProcess);
+        audioContext.close().then(() => {
             audioContext = null;
-        }
+            scriptNode = null;
+        });
     };
 
-    const [offsetRight, setOffsetRight] = useState(0);
-    const [offsetLeft, setOffsetLeft] = useState(0);
-    const [results, setResults] = useState("");
-
     const pushLeft = () => {
-        setOffsetRight(offsetRight + 3);
-        if (offsetRight - offsetLeft > 48) {
-            setResults("Player Pushing Left won!");
+        setOffsetRight((prevOffsetRight) => prevOffsetRight + 1);
+        if (offsetRight - offsetLeft > 170) {
+            setResults('Player 2 won!');
+            stopRecording();
         }
     };
 
     const pushRight = () => {
-        const newOffsetLeft = offsetLeft + 3;
-        if (newOffsetLeft - offsetRight > 48) {
-            setResults("Player Pushing Right won!");
+        const newOffsetLeft = offsetLeft + 1;
+        if (newOffsetLeft - offsetRight > 170) {
+            setResults('Player 1 won!');
+            stopRecording();
         } else {
             setOffsetLeft(newOffsetLeft);
         }
     };
 
-    const [timer, setTimer] = useState(0);
+    useEffect(() => {
+        if (bpm > 10 && isRecording) {
+            if (userPosition === 1) {
+                requestAnimationFrame(pushRight);
 
+                //This may look bad, however you are obligated to ignore this part as if it is my repo => my rules.
+            } else {
+                requestAnimationFrame(pushLeft);
+            }
+
+        }
+        if (bpm < 1) {
+            setAaas("")
+        }
+        if (bpm > 0) {
+            setAaas("A")
+        }
+        if (bpm > 1) {
+            setAaas("AA")
+        }
+        if (bpm > 2) {
+            setAaas("AAA")
+        }
+        if (bpm > 3) {
+            setAaas("AAAA")
+        }
+        if (bpm > 4) {
+            setAaas("AAAAA")
+        }
+        if (bpm > 5) {
+            setAaas("AAAAAA")
+        }
+        if (bpm > 6) {
+            setAaas("AAAAAAA")
+        }
+        if (bpm > 7) {
+            setAaas("AAAAAAAA")
+        }
+        if (bpm > 8) {
+            setAaas("AAAAAAAAA")
+        }
+        if (bpm > 9) {
+            setAaas("AAAAAAAAAA")
+        }
+        if (bpm > 10) {
+            setAaas("AAAAAAAAAAA")
+        }
+        if (bpm > 11) {
+            setAaas("AAAAAAAAAAA")
+        }
+        if (bpm > 12) {
+            setAaas("AAAAAAAAAAAAA")
+        }
+        if (bpm > 13) {
+            setAaas("AAAAAAAAAAAAAA")
+        }
+        if (bpm > 14) {
+            setAaas("AAAAAAAAAAAAAAA")
+        }
+        if (bpm > 15) {
+            setAaas("AAAAAAAAAAAAAAAA")
+        }
+        if (bpm > 16) {
+            setAaas("AAAAAAAAAAAAAAAAA")
+        }
+        if (bpm > 17) {
+            setAaas("AAAAAAAAAAAAAAAAAA...")
+        }
+    }, [bpm, offsetLeft, offsetRight, userPosition]);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setTimer(prevTimer => prevTimer + 1);
+            setTimer((prevTimer) => prevTimer + 1);
         }, 1000);
-
-        if (bpm > 3) {
-            setTimeout(() => {
-                if (userPosition == 1) {
-
-                    pushRight();
-                }
-                else {
-                    pushLeft();
-                }
-            }, 100)
-
-        }
-
-        if (timer > 2) {
-            if (userPosition === 1) {
-                setUserPosition(0)
-                setTimer(0)
-            }
-            else {
-                setUserPosition(1)
-                setTimer(0)
-            }
-        }
 
         return () => {
             clearInterval(interval);
         };
+    }, [timer]);
 
-    }, [bpm, offsetLeft, userPosition]);
+    useEffect(() => {
+        if (timer > 2 && isRecording) {
+            setUserPosition((prevUserPosition) => (prevUserPosition === 1 ? 0 : 1));
+            setTimer(0);
+        }
+    }, [timer]);
+
+    const resetGame = () => {
+        setOffsetLeft(0);
+        setOffsetRight(0);
+        setTimer(0)
+        setAaas("")
+    };
 
     return (
         <div className="playground">
-            <h3>Rectangle Pushers</h3>
+            <h3>{`dalida${aaas}`}</h3>
             <div className="rectangle" style={{ marginRight: `${offsetRight}px`, marginLeft: `${offsetLeft}px` }} />
             <div className="player-switch">
-                <button style={userPosition == 1 ? { borderColor: "teal" } : { color: "white" }}>
+                <button style={userPosition === 1 ? { borderColor: 'teal' } : { color: 'white' }}>
                     Player 1
                 </button>
-                <button style={userPosition != 1 ? { borderColor: "teal" } : { color: "white" }}>
+                <button style={userPosition !== 1 ? { borderColor: 'teal' } : { color: 'white' }}>
                     Player 2
                 </button>
             </div>
-            <button style={{ marginTop: "15px", marginBottom: "17px" }} onClick={() => { setOffsetLeft(0); setOffsetRight(0); setResults(""); }}>
-                Set zero
-            </button>
-            <button onClick={startListening} disabled={isRecording}>
-                Start
-            </button>
+            {isRecording ? (
+                <button className="action-btn" onClick={stopRecording}>Stop</button>
+            ) : (
+                <button className="action-btn" onClick={startListening} disabled={isRecording}>
+                    Start
+                </button>
+            )}
             <div className="threshold" />
             <h3>{results}</h3>
-            <p>{bpm}</p>
-        </div >
+            {/* <p>{bpm}</p> */}
+        </div>
     );
 }
 
