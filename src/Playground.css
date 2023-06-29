@@ -22,3 +22,13 @@
     top: 70px;
     z-index: 0;
 }
+
+.player-switch {
+    display: flex;
+    width: 60%;
+    justify-content: space-around;
+}
+
+.player-switch button {
+    cursor: auto;
+}

@@ -3,7 +3,7 @@ import './Playground.css';
 
 function Playground() {
     const [bpm, setBpm] = useState(0);
-    const [user1, setUser1] = useState(true);
+    const [userPosition, setUserPosition] = useState(1);
     const [isRecording, setIsRecording] = useState(false);
 
     let audioContext = null;
@@ -79,20 +79,57 @@ function Playground() {
         }
     };
 
+    const [timer, setTimer] = useState(0);
+
+
     useEffect(() => {
-        if (bpm > 5) {
+        const interval = setInterval(() => {
+            setTimer(prevTimer => prevTimer + 1);
+        }, 1000);
+
+        if (bpm > 3) {
             setTimeout(() => {
-                pushRight();
+                if (userPosition == 1) {
+
+                    pushRight();
+                }
+                else {
+                    pushLeft();
+                }
             }, 100)
 
         }
-    }, [bpm, offsetLeft]);
+
+        if (timer > 2) {
+            if (userPosition === 1) {
+                setUserPosition(0)
+                setTimer(0)
+            }
+            else {
+                setUserPosition(1)
+                setTimer(0)
+            }
+        }
+
+        return () => {
+            clearInterval(interval);
+        };
+
+    }, [bpm, offsetLeft, userPosition]);
 
     return (
         <div className="playground">
             <h3>Rectangle Pushers</h3>
             <div className="rectangle" style={{ marginRight: `${offsetRight}px`, marginLeft: `${offsetLeft}px` }} />
-            <button style={{ marginTop: "15px" }} onClick={() => { setOffsetLeft(0); setOffsetRight(0); setResults(""); }}>
+            <div className="player-switch">
+                <button style={userPosition == 1 ? { borderColor: "teal" } : { color: "white" }}>
+                    Player 1
+                </button>
+                <button style={userPosition != 1 ? { borderColor: "teal" } : { color: "white" }}>
+                    Player 2
+                </button>
+            </div>
+            <button style={{ marginTop: "15px", marginBottom: "17px" }} onClick={() => { setOffsetLeft(0); setOffsetRight(0); setResults(""); }}>
                 Set zero
             </button>
             <button onClick={startListening} disabled={isRecording}>
@@ -101,7 +138,7 @@ function Playground() {
             <div className="threshold" />
             <h3>{results}</h3>
             <p>{bpm}</p>
-        </div>
+        </div >
     );
 }
 
