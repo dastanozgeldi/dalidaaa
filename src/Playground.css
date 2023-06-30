@@ -6,13 +6,41 @@
 }
 
 .rectangle {
-    width: 170px;
+    width: 30vw;
     height: 90px;
     margin-top: 50px;
     margin-bottom: 50px;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
+
+.eyes {
+    width: 10%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.eye {
+    background-color: rgb(27, 27, 27);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.smile {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 3px solid black;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    transform: rotate(135deg);
+}
+
 
 .threshold {
     width: 3px;

@@ -74,16 +74,39 @@ function Playground() {
     };
 
     const pushRight = () => {
-        const newOffsetLeft = offsetLeft + 1;
+        setOffsetLeft((prevOffsetLeft) => prevOffsetLeft + 1);
         if (newOffsetLeft - offsetRight > 170) {
             setResults('Player 1 won!');
             stopRecording();
-        } else {
-            setOffsetLeft(newOffsetLeft);
+        }
+    };
+
+    const pushSuperLeft = () => {
+        setOffsetRight((prevOffsetRight) => prevOffsetRight + 3);
+        if (offsetRight - offsetLeft > 170) {
+            setResults('Player 2 won!');
+            stopRecording();
+        }
+    };
+
+    const pushSuperRight = () => {
+        setOffsetLeft((prevOffsetLeft) => prevOffsetLeft + 3);
+        if (newOffsetLeft - offsetRight > 170) {
+            setResults('Player 1 won!');
+            stopRecording();
         }
     };
 
     useEffect(() => {
+        if (bpm > 15 && isRecording) {
+            if (userPosition === 1) {
+                requestAnimationFrame(pushSuperRight);
+
+                //This may look bad, however you are obligated to ignore this part as if it is my repo => my rules.
+            } else {
+                requestAnimationFrame(pushSuperLeft);
+            }
+        }
         if (bpm > 10 && isRecording) {
             if (userPosition === 1) {
                 requestAnimationFrame(pushRight);
@@ -94,69 +117,17 @@ function Playground() {
             }
 
         }
-        if (bpm < 1) {
-            setAaas("")
-        }
-        if (bpm > 0) {
-            setAaas("A")
-        }
-        if (bpm > 1) {
-            setAaas("AA")
-        }
-        if (bpm > 2) {
-            setAaas("AAA")
-        }
-        if (bpm > 3) {
-            setAaas("AAAA")
-        }
-        if (bpm > 4) {
-            setAaas("AAAAA")
-        }
-        if (bpm > 5) {
-            setAaas("AAAAAA")
-        }
-        if (bpm > 6) {
-            setAaas("AAAAAAA")
-        }
-        if (bpm > 7) {
-            setAaas("AAAAAAAA")
-        }
-        if (bpm > 8) {
-            setAaas("AAAAAAAAA")
-        }
-        if (bpm > 9) {
-            setAaas("AAAAAAAAAA")
-        }
-        if (bpm > 10) {
-            setAaas("AAAAAAAAAAA")
-        }
-        if (bpm > 11) {
-            setAaas("AAAAAAAAAAA")
-        }
-        if (bpm > 12) {
-            setAaas("AAAAAAAAAAAAA")
-        }
-        if (bpm > 13) {
-            setAaas("AAAAAAAAAAAAAA")
-        }
-        if (bpm > 14) {
-            setAaas("AAAAAAAAAAAAAAA")
-        }
-        if (bpm > 15) {
-            setAaas("AAAAAAAAAAAAAAAA")
-        }
-        if (bpm > 16) {
-            setAaas("AAAAAAAAAAAAAAAAA")
-        }
-        if (bpm > 17) {
-            setAaas("AAAAAAAAAAAAAAAAAA...")
+        let aaas = ""
+        for (let i = 0; i < bpm; i++) {
+            aaas += "A";
+            setAaas(aaas)
         }
     }, [bpm, offsetLeft, offsetRight, userPosition]);
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setTimer((prevTimer) => prevTimer + 1);
-        }, 1000);
+            setTimer((prevTimer) => prevTimer + 0.1);
+        }, 100);
 
         return () => {
             clearInterval(interval);
@@ -179,15 +150,36 @@ function Playground() {
 
     return (
         <div className="playground">
-            <h3>{`dalida${aaas}`}</h3>
-            <div className="rectangle" style={{ marginRight: `${offsetRight}px`, marginLeft: `${offsetLeft}px` }} />
+            <h3>{`Say: dalida${aaas}`}</h3>
+            <div className="rectangle" style={{ marginRight: `${offsetRight}px`, marginLeft: `${offsetLeft}px` }}>
+                <div className="eyes">
+                    <div className="eye" />
+                    <div className="eye" />
+                </div>
+                <div className="smile" />
+            </div>
             <div className="player-switch">
-                <button style={userPosition === 1 ? { borderColor: 'teal' } : { color: 'white' }}>
-                    Player 1
-                </button>
-                <button style={userPosition !== 1 ? { borderColor: 'teal' } : { color: 'white' }}>
-                    Player 2
-                </button>
+                {userPosition === 1 ?    <>
+                <div>
+                    <button style={userPosition === 1 ? { borderColor: 'teal' } : { color: 'white' }}>
+                        Player 1
+                    </button>
+                    <button style={userPosition !== 1 ? { borderColor: 'teal' } : { color: 'white' }}>
+                </div>
+                        Player 2
+                    </button>     
+                </>
+                : 
+                <>
+                    <button style={userPosition === 1 ? { borderColor: 'teal' } : { color: 'white' }}>
+                        Player 1
+                    </button>
+                    <button style={userPosition !== 1 ? { borderColor: 'teal' } : { color: 'white' }}>
+                        Player 2
+                    </button>
+                </>
+            }
+
             </div>
             {isRecording ? (
                 <button className="action-btn" onClick={stopRecording}>Stop</button>
@@ -198,7 +190,7 @@ function Playground() {
             )}
             <div className="threshold" />
             <h3>{results}</h3>
-            {/* <p>{bpm}</p> */}
+            <p style={{ position: "absolute", bottom: "3px" }}>Push rectangle to win;</p>
         </div>
     );
 }
