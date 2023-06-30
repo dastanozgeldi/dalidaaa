@@ -67,7 +67,7 @@ function Playground() {
 
     const pushLeft = () => {
         setOffsetRight((prevOffsetRight) => prevOffsetRight + 1);
-        if (offsetRight - offsetLeft > 170) {
+        if (offsetRight - offsetLeft > 500) {
             setResults('Player 2 won!');
             stopRecording();
         }
@@ -75,7 +75,7 @@ function Playground() {
 
     const pushRight = () => {
         setOffsetLeft((prevOffsetLeft) => prevOffsetLeft + 1);
-        if (newOffsetLeft - offsetRight > 170) {
+        if (offsetLeft - offsetRight > 500) {
             setResults('Player 1 won!');
             stopRecording();
         }
@@ -83,7 +83,7 @@ function Playground() {
 
     const pushSuperLeft = () => {
         setOffsetRight((prevOffsetRight) => prevOffsetRight + 3);
-        if (offsetRight - offsetLeft > 170) {
+        if (offsetRight - offsetLeft > 500) {
             setResults('Player 2 won!');
             stopRecording();
         }
@@ -91,7 +91,7 @@ function Playground() {
 
     const pushSuperRight = () => {
         setOffsetLeft((prevOffsetLeft) => prevOffsetLeft + 3);
-        if (newOffsetLeft - offsetRight > 170) {
+        if (offsetLeft - offsetRight > 500) {
             setResults('Player 1 won!');
             stopRecording();
         }
