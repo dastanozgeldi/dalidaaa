@@ -159,39 +159,52 @@ function Playground() {
                 <div className="smile" />
             </div>
             <div className="player-switch">
-                {userPosition === 1 ?    <>
-                <div>
-                    <button style={userPosition === 1 ? { borderColor: 'teal' } : { color: 'white' }}>
-                        Player 1
-                    </button>
-                    <button style={userPosition !== 1 ? { borderColor: 'teal' } : { color: 'white' }}>
-                </div>
-                        Player 2
-                    </button>     
+                {userPosition === 1 ? <>
+                    <div className="btn-timer">
+                        <button style={userPosition === 1 ? { borderColor: 'teal' } : { color: 'white' }}>
+                            Player 1
+                        </button>
+                        <p>{isRecording ? Math.round(Math.abs((timer - 2) * 100)) / 100 : "2.0"}</p>
+                    </div>
+                    <div className="btn-timer">
+                        <button style={userPosition !== 1 ? { borderColor: 'teal' } : { color: 'white' }}>
+                            Player 2
+                        </button>
+                        <p>2.0</p>
+                    </div>
                 </>
-                : 
-                <>
-                    <button style={userPosition === 1 ? { borderColor: 'teal' } : { color: 'white' }}>
-                        Player 1
-                    </button>
-                    <button style={userPosition !== 1 ? { borderColor: 'teal' } : { color: 'white' }}>
-                        Player 2
-                    </button>
-                </>
-            }
+                    :
+                    <>
+                        <div className="btn-timer" >
+                            <button style={userPosition === 1 ? { borderColor: 'teal' } : { color: 'white' }}>
+                                Player 1
+                            </button>
+                            <p>2.0</p>
+                        </div>
+                        <div className="btn-timer">
+                            <button style={userPosition !== 1 ? { borderColor: 'teal' } : { color: 'white' }}>
+                                Player 2
+                            </button>
+                            <p>{isRecording ? Math.round(Math.abs((timer - 2) * 100)) / 100 : "2.0"}</p>
+                        </div>
+                    </>
+                }
 
             </div>
-            {isRecording ? (
-                <button className="action-btn" onClick={stopRecording}>Stop</button>
-            ) : (
-                <button className="action-btn" onClick={startListening} disabled={isRecording}>
-                    Start
-                </button>
-            )}
+            {
+                isRecording ? (
+                    <button className="action-btn" onClick={stopRecording}>Stop</button>
+                ) : (
+                    <button className="action-btn" onClick={startListening} disabled={isRecording}>
+                        Start
+                    </button>
+                )
+            }
             <div className="threshold" />
             <h3>{results}</h3>
-            <p style={{ position: "absolute", bottom: "3px" }}>Push rectangle to win;</p>
-        </div>
+            <p style={{ position: "absolute", bottom: "30px" }}>Made with  &#60;3 for the best motivator Dalida</p>
+            <p style={{ position: "absolute", bottom: "0px" }}>by <a onClick={() => window.open("https://github.com/dastanozgeldi/")}>Dosek</a> and <a onClick={(() => window.open("https://github.com/EraOfCoding"))}>EraOfCoding</a></p>
+        </div >
     );
 }
 

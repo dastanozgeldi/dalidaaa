@@ -5,6 +5,10 @@
     align-items: center;
 }
 
+.playground a {
+    cursor: pointer;
+}
+
 .rectangle {
     width: 30vw;
     height: 90px;
@@ -63,4 +67,16 @@
 
 .action-btn {
     margin-top: 70px;
+}
+
+.btn-timer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@media only screen and (max-width: 720px) {
+    .eyes {
+        width: 40%;
+    }
 }
